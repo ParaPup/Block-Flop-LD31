@@ -79,7 +79,7 @@ public class GameManager : MonoBehaviour {
 
 	void killBlocks(){
 		Debug.Log ("Kill Blocks");
-		print(DropBlocks[0]);
+		//print(DropBlocks[0]);
 
 //		int[] x = new int[10];
 //		for (int i = 0; i < 10; i++)
@@ -95,15 +95,24 @@ public class GameManager : MonoBehaviour {
 		}
 		//DropBlocks.Clear(DropBlocks, 0, DropBlocks.Length);
 
-		DropBlocks = new GameObject[0];
+		for(int i = 0; i < DropBlocks.Length; i++)
+		{
+			Destroy(DropBlocks[i]);
+		}
 
+		DropBlocks = new GameObject[0];
+		//print(DropBlocks[0]);
 
 
 		//DropBlocks = new Array ();
-//		for(int i = 0; i < DropBlocks.Length; i++)
-//		{
-//			Destroy(DropBlocks[i]);
-//		}
+
+		//spawnBlocks();
+		StartCoroutine(respawner());
+	}
+
+	IEnumerator respawner ()
+	{
+		yield return new WaitForSeconds(0.1f);
 		spawnBlocks();
 	}
 
