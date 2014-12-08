@@ -26,15 +26,20 @@ public class bfPlayerController : MonoBehaviour {
 	// Update is called once per frame
 	void Update (){
 		screenLock();
+//		SetAccelMag();
+//		SetAccelX();
+//		SetAccelY();
+//		ScaleAccel();
+//		Move();
+	}
+
+	void FixedUpdate(){
+		jumper();
 		SetAccelMag();
 		SetAccelX();
 		SetAccelY();
 		ScaleAccel();
 		Move();
-	}
-
-	void FixedUpdate(){
-		jumper();
 	}
 
 	void OnCollisionEnter(Collision collision){

@@ -1,29 +1,27 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class GameOver : MonoBehaviour {
+public class MassMurder : MonoBehaviour {
 
 	private GameManager oGameManager;
-	private GUIText gooey;
-	private AudioSource gameEnd;
-	
+
 	// Use this for initialization
 	void Start () {
-		
 		GameObject Temp = GameObject.Find("GameManager");
 		oGameManager = Temp.GetComponent<GameManager>();
-
-		gooey = GetComponent<GUIText>();
-		gameEnd = GetComponent<AudioSource>();
 	}
 	
 	// Update is called once per frame
 	void Update () {
-		//Debug.Log (gooey);
-		if(oGameManager.playerAlive)
+	
+	}
+
+	void OnTriggerEnter(Collider col)
+	{
+		if (col.gameObject.name == "Player")
 		{
-			gooey.enabled = true;
-			gameEnd.enabled = true;
+			//Destroy(col.gameObject);
+		oGameManager.playerAlive = true;
 		}
 	}
 }
