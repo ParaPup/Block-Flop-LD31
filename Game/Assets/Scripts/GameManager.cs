@@ -18,6 +18,7 @@ public class GameManager : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
+		restart();
 		if (timer > 0){
 			timer -= Time.deltaTime;
 		}
@@ -28,18 +29,23 @@ public class GameManager : MonoBehaviour {
 		}
 	}
 
+	void restart(){
+		if(Input.GetKeyDown(KeyCode.Tab)){
+			Application.LoadLevel (0);
+		}
+	}
+
 	void spawnBlocks(){
 		for (int z = -5; z < 6; z++) {
 			for (int x = -9; x < 10; x++) {
-				GameObject cube = GameObject.CreatePrimitive(PrimitiveType.Cube);
+				//GameObject cube = GameObject.CreatePrimitive(PrimitiveType.Cube);
 				//cube.AddComponent<Rigidbody>();
-				cube.tag = "DropBlock";
-				cube.transform.position = new Vector3(x, 0, z);
+				//cube.tag = "DropBlock";
+				//cube.transform.position = new Vector3(x, 0, z);
+				Instantiate(block2Drop, new Vector3(x, 0, z), Quaternion.identity);
 			}
 		}
 		dropCheck();
-		Debug.Log ("Spawn Blocks");
-		print(DropBlocks[0]);
 	}
 
 	void dropCheck(){
@@ -47,11 +53,9 @@ public class GameManager : MonoBehaviour {
 		for(int i = 0; i < DropBlocks.Length; i++)
 		{
 			safe = Random.Range(0, i);
-			DropBlocks[i].gameObject.renderer.material.color = new Color(255, 0, 0, 255);
+			//DropBlocks[i].gameObject.renderer.material.color = new Color(255, 0, 0, 255);
 		}
 		DropBlocks[safe].gameObject.renderer.material.color = new Color(0, 255, 0, 255);
-		Debug.Log ("DropCheck");
-		print(DropBlocks[0]);
 	}
 
 	void dropIt(){
@@ -67,18 +71,15 @@ public class GameManager : MonoBehaviour {
 		Destroy(DropBlocks[safe].GetComponent("Rigidbody"));
 		//DropBlocks[safe].gameObject.renderer.material.color = new Color(0, 255, 0, 255);
 		StartCoroutine(killer());
-		Debug.Log ("DropIT");
-		print(DropBlocks[0]);
 	}
 
 	void timeTill(){
-		if (timerReset > 3){
+		if (timerReset > 5){
 			timerReset = timerReset-0.1;
 		}
 	}
 
 	void killBlocks(){
-		Debug.Log ("Kill Blocks");
 		//print(DropBlocks[0]);
 
 //		int[] x = new int[10];

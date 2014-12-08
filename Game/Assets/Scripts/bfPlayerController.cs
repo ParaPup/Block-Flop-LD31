@@ -9,6 +9,15 @@ public class bfPlayerController : MonoBehaviour {
 
 	public GameObject oCamera;
 
+	public const float fMaxAccel = 120;
+	public const float fMinAccel = 120;
+
+	public const float fMaxVelocity = 30;
+
+	private float fAccelMag = 0;
+	private float fAccelX = 0;
+	private float fAccelY = 0;
+
 	// Use this for initialization
 	void Start () {
 	
@@ -17,11 +26,16 @@ public class bfPlayerController : MonoBehaviour {
 	// Update is called once per frame
 	void Update (){
 		screenLock();
+		SetAccelMag();
+		SetAccelX();
+		SetAccelY();
+		ScaleAccel();
+		Move();
 	}
 
 	void FixedUpdate(){
 		jumper();
-		movement();
+		//movement();
 	}
 
 	void OnCollisionEnter(Collision collision){
@@ -37,29 +51,87 @@ public class bfPlayerController : MonoBehaviour {
 		}
 	}
 
+	void SetAccelMag()
+	{
+		fAccelMag = fMaxAccel;
+		if (fAccelMag < fMinAccel)
+		{
+			fAccelMag = fMinAccel;
+		}
+	}
+	
+	void SetAccelX()
+	{
+		fAccelX = 0;
+
+		if (Input.GetKey(KeyCode.D))
+		{
+			fAccelX += fAccelMag;
+		}
+		
+		if (Input.GetKey(KeyCode.A))
+		{
+			fAccelX -= fAccelMag;
+		}
+	}
+	
+	void SetAccelY()
+	{
+		fAccelY = 0;
+
+		if (Input.GetKey(KeyCode.W))
+		{
+			fAccelY += fAccelMag;
+		}
+		
+		if (Input.GetKey(KeyCode.S))
+		{
+			fAccelY -= fAccelMag;
+		}
+	}
+	
+	void ScaleAccel()
+	{
+		if (Mathf.Abs(fAccelX) + Mathf.Abs(fAccelY) > fAccelMag)
+		{
+			fAccelX = fAccelX / 2;
+			fAccelY = fAccelY / 2;
+		}
+	}
+
+	void Move()
+	{
+		rigidbody.AddForce(Vector3.forward * fAccelY);
+		rigidbody.AddForce(Vector3.right * fAccelX);
+	}
+
 	void movement(){
 		//Forward
 		if (Input.GetAxis("Vertical") >0) 
 		{
-			transform.localPosition += transform.forward * Time.deltaTime * moveSpeed;		
+			//transform.localPosition += transform.forward * Time.deltaTime * moveSpeed;
+
 		}
 		
 		//Backwards
 		if (Input.GetAxis("Vertical") <0)
 		{
-			transform.localPosition += -transform.forward * Time.deltaTime * moveSpeed;		
+			//transform.localPosition += -transform.forward * Time.deltaTime * moveSpeed;
+
 		}
 
 		//Left
 		if (Input.GetAxis("Horizontal") <0) 
 		{
-			transform.localPosition += -transform.right * Time.deltaTime * moveSpeed;		
+			//transform.localPosition += -transform.right * Time.deltaTime * moveSpeed;
+
 		}
 		
 		//Right
 		if (Input.GetAxis("Horizontal") >0) 
 		{
-			transform.localPosition += transform.right * Time.deltaTime * moveSpeed;		
+			//transform.localPosition += transform.right * Time.deltaTime * moveSpeed;
+
 		}
 	}
 
