@@ -11,14 +11,25 @@ public class GameManager : MonoBehaviour {
 	public double timer = 5;
 	public double timerReset = 5;
 
+	public int scored;
+
+	public bool playerAlive;
+
+	public AudioClip roundUp;
+
+	private AudioSource gamemusic;
+
 	// Use this for initialization
 	void Start () {
 		spawnBlocks();
+
+		gamemusic = GetComponent<AudioSource>();
 	}
 	
 	// Update is called once per frame
 	void Update () {
 		restart();
+		death();
 		if (timer > 0){
 			timer -= Time.deltaTime;
 		}
@@ -26,6 +37,14 @@ public class GameManager : MonoBehaviour {
 			timeTill();
 			timer = timerReset;
 			dropIt();
+		}
+	}
+
+	void death(){
+		if (playerAlive)
+		{
+			gamemusic.enabled = false;
+			Time.timeScale = 0.00001F;
 		}
 	}
 
@@ -38,10 +57,6 @@ public class GameManager : MonoBehaviour {
 	void spawnBlocks(){
 		for (int z = -5; z < 6; z++) {
 			for (int x = -9; x < 10; x++) {
-				//GameObject cube = GameObject.CreatePrimitive(PrimitiveType.Cube);
-				//cube.AddComponent<Rigidbody>();
-				//cube.tag = "DropBlock";
-				//cube.transform.position = new Vector3(x, 0, z);
 				Instantiate(block2Drop, new Vector3(x, 0, z), Quaternion.identity);
 			}
 		}
@@ -59,42 +74,22 @@ public class GameManager : MonoBehaviour {
 	}
 
 	void dropIt(){
-		//DropBlocks = GameObject.FindGameObjectsWithTag ("DropBlock");
 		for(int i = 0; i < DropBlocks.Length; i++)
 		{
-			//Debug.Log("Player Number "+i+" is named "+DropBlocks[i].name);
 			DropBlocks[i].AddComponent("Rigidbody");
-			//safe = Random.Range(0, i);
-			//DropBlocks[i].gameObject.renderer.material.color = new Color(255, 0, 0, 255);
 		}
 		Debug.Log(safe);
 		Destroy(DropBlocks[safe].GetComponent("Rigidbody"));
-		//DropBlocks[safe].gameObject.renderer.material.color = new Color(0, 255, 0, 255);
 		StartCoroutine(killer());
 	}
 
 	void timeTill(){
-		if (timerReset > 5){
+		if (timerReset > 3){
 			timerReset = timerReset-0.1;
 		}
 	}
 
 	void killBlocks(){
-		//print(DropBlocks[0]);
-
-//		int[] x = new int[10];
-//		for (int i = 0; i < 10; i++)
-//		{
-//			x[i] = 5;
-//		}
-//		Array.Clear(x, 0, x.Length);
-
-		//int[] x = new int[10];
-		for (int i = 0; i < DropBlocks.Length; i++)
-		{
-			//DropBlocks[i] = 5;
-		}
-		//DropBlocks.Clear(DropBlocks, 0, DropBlocks.Length);
 
 		for(int i = 0; i < DropBlocks.Length; i++)
 		{
@@ -102,12 +97,7 @@ public class GameManager : MonoBehaviour {
 		}
 
 		DropBlocks = new GameObject[0];
-		//print(DropBlocks[0]);
 
-
-		//DropBlocks = new Array ();
-
-		//spawnBlocks();
 		StartCoroutine(respawner());
 	}
 
@@ -115,6 +105,8 @@ public class GameManager : MonoBehaviour {
 	{
 		yield return new WaitForSeconds(0.1f);
 		spawnBlocks();
+		scored = scored+1;
+		audio.PlayOneShot(roundUp, 0.7F);
 	}
 
 	IEnumerator killer ()

@@ -35,7 +35,6 @@ public class bfPlayerController : MonoBehaviour {
 
 	void FixedUpdate(){
 		jumper();
-		//movement();
 	}
 
 	void OnCollisionEnter(Collision collision){
@@ -103,36 +102,6 @@ public class bfPlayerController : MonoBehaviour {
 	{
 		rigidbody.AddForce(Vector3.forward * fAccelY);
 		rigidbody.AddForce(Vector3.right * fAccelX);
-	}
-
-	void movement(){
-		//Forward
-		if (Input.GetAxis("Vertical") >0) 
-		{
-			//transform.localPosition += transform.forward * Time.deltaTime * moveSpeed;
-
-		}
-		
-		//Backwards
-		if (Input.GetAxis("Vertical") <0)
-		{
-			//transform.localPosition += -transform.forward * Time.deltaTime * moveSpeed;
-
-		}
-
-		//Left
-		if (Input.GetAxis("Horizontal") <0) 
-		{
-			//transform.localPosition += -transform.right * Time.deltaTime * moveSpeed;
-
-		}
-		
-		//Right
-		if (Input.GetAxis("Horizontal") >0) 
-		{
-			//transform.localPosition += transform.right * Time.deltaTime * moveSpeed;
-
-		}
 	}
 
 	void screenLock(){
